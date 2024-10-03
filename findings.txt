@@ -1,0 +1,2 @@
+Q: WHAT DO THE DOCKER CONTAINERS SHARE WITH THE HOST?
+A: In this excercise no files are being shared. Host can access docker container information trough an exposed port. Only one of the containers is accessible straight up.

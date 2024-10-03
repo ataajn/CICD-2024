@@ -1,0 +1,10 @@
+CONTAINER ID   IMAGE                              COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+e4e07d46347d   excercise1_servicenata2-internal   "docker-entrypoint.s…"   4 minutes ago   Up 4 minutes                                                 excercise1_servicenata2-internal_1
+e9a83171278d   excercise1_servicenata1-exposed    "python /app/main.py"    4 minutes ago   Up 4 minutes   0.0.0.0:8199->8000/tcp, [::]:8199->8000/tcp   excercise1_servicenata1-exposed_1
+
+NETWORK ID     NAME                  DRIVER    SCOPE
+b8cd4ab50264   bridge                bridge    local
+61dcfadcef77   excercise1_network1   bridge    local
+d048bae0e6d0   host                  host      local
+e46837d4ecb7   none                  null      local
+

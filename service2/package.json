@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "diskusage": "^1.2.0",
+    "ps-node": "^0.1.6",
+    "check-disk-space": "3.4.0"
+  }
+}

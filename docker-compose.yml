@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  servicenata1-exposed:
+    build: ./service1
+    networks:
+      - network1
+    ports:
+      - "8199:8000"
+  servicenata2-internal:
+    build: ./service2
+    networks:
+      - network1
+networks:
+  network1: {}

@@ -1,0 +1,5 @@
+MANDATORY LLM REPORT
+- used tool: chatGPT
+- motivation: saves time, acts like google in some cases. No LLM code is in the source code, LLM was used to be able to search information with right keywords. Also problem diagnosis, what part was not working.
+- how and why LLM helped: It was able to help on the tasks I needed it
+- what LLM was not able to provide: tell me why js and python returned different disk sizes. Had to switch js to different library, then they matched.
