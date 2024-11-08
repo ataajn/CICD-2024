@@ -1,0 +1,13 @@
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                                               NAMES
+fa93fbea1c7c   excercise4_nginx                    "/docker-entrypoint.…"   20 seconds ago   Up 19 seconds   8198/tcp, 0.0.0.0:8198->80/tcp, [::]:8198->80/tcp   excercise4_nginx_1
+18d7223f072d   excercise4_servicenata1-exposed-2   "python /app/main.py"    24 seconds ago   Up 22 seconds   0.0.0.0:5002->8000/tcp, [::]:5002->8000/tcp         excercise4_servicenata1-exposed-2_1
+0ecc146c19a4   excercise4_servicenata1-exposed-1   "python /app/main.py"    24 seconds ago   Up 22 seconds   0.0.0.0:5001->8000/tcp, [::]:5001->8000/tcp         excercise4_servicenata1-exposed-1_1
+a8460ae29a80   excercise4_servicenata1-exposed-3   "python /app/main.py"    24 seconds ago   Up 22 seconds   0.0.0.0:5003->8000/tcp, [::]:5003->8000/tcp         excercise4_servicenata1-exposed-3_1
+7f4558516994   excercise4_servicenata2-internal    "docker-entrypoint.s…"   24 seconds ago   Up 22 seconds                                                       excercise4_servicenata2-internal_1
+
+NETWORK ID     NAME                  DRIVER    SCOPE
+07808d1aa448   bridge                bridge    local
+89413a857fc4   excercise4_network1   bridge    local
+d048bae0e6d0   host                  host      local
+e46837d4ecb7   none                  null      local
+

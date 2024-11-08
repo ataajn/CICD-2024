@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script>
+            async function getService1Response() {
+                var data = await fetch('/fetchData/');
+                var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = stringified;
+            }
+
+            async function stopServices(){
+                var data = await fetch('/stop/');
+                console.log("responded stop")
+            }
+
+
+        </script>
+    </head>
+    <body>
+        <h1>VAIHTOEHDOT ON TASSA VALITSE NIISTA!</h1>
+        <button onclick="getService1Response()">Request</button>
+        <button onclick="stopServices()">Stop</button>
+        <textarea rows="20" cols="100" id="TextAreaId"></textarea>
+    </body>
+</html>

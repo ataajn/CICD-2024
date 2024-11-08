@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  servicenata1-exposed-1:
+    privileged: true
+    build: ./service1
+    ports: 
+      - "5001:8000"
+    networks:
+      - network1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  servicenata1-exposed-2:
+    build: ./service1
+    ports: 
+      - "5002:8000"
+    networks:
+      - network1
+  servicenata1-exposed-3:
+    build: ./service1
+    ports: 
+      - "5003:8000"
+    networks:
+      - network1
+  servicenata2-internal:
+    build: ./service2
+    networks:
+      - network1
+  nginx:
+    build: ./nginx
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports: 
+      - "8198:80"
+    networks:
+      - network1
+    depends_on:
+      - servicenata1-exposed-1
+      - servicenata1-exposed-2
+      - servicenata1-exposed-3
+networks:
+  network1: {}
