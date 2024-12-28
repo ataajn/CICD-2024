@@ -68,7 +68,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def handle_request():
-    print("Received request")
+    # TODO: add functionality to handle PAUSE, RUNNING, aka switch responding state
+    # TODO: functionality to log out when INIT
+    # TODO: change functionality SHUTDOWN
+    # TODO: move the functionality of /request
+    # TODO: add functionality to run-log, add functionality to keeping logs.
 
     # Check for stop message
     stopHeader = request.headers.get('StopMessage')

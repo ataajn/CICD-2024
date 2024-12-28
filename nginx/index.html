@@ -2,24 +2,42 @@
 <html lang="en">
     <head>
         <script>
-            async function getService1Response() {
+            async function getRequest() {
                 var data = await fetch('/fetchData/');
                 var stringified = JSON.stringify(await data.json())
                 document.getElementById('TextAreaId').value = stringified;
             }
 
-            async function stopServices(){
-                var data = await fetch('/stop/');
-                console.log("responded stop")
+            async function getState() {
+                var data = await fetch('/state/');
+                var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = stringified;
+            }
+
+            async function getRunLog() {
+                var data = await fetch('/run-log/');
+                var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = stringified;
+            }
+
+            async function changeState(command){
+                // TODO: implement PUT request to change state
+                //var data = await fetch('/stop/');
+                //console.log("responded stop")
             }
 
 
         </script>
     </head>
     <body>
-        <h1>VAIHTOEHDOT ON TASSA VALITSE NIISTA!</h1>
-        <button onclick="getService1Response()">Request</button>
-        <button onclick="stopServices()">Stop</button>
+        <h1>Options For the API</h1>
+        <button onclick="getRequest()">Get Request</button>
+        <button onclick="getRunLog()">Get Run-log</button>
+        <button onclick="getState()">Get State</button>
+        <button onclick="changeState('SHUTDOWN')">Set state: Shutdown</button>
+        <button onclick="changeState('PAUSED')">Set state: Pause</button>
+        <button onclick="changeState('INIT')">Set state: Init</button>
+        <button onclick="changeState('RUNNING')">Set state: Running</button>
         <textarea rows="20" cols="100" id="TextAreaId"></textarea>
     </body>
 </html>

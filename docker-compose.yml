@@ -9,18 +9,18 @@ services:
       - network1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  servicenata1-exposed-2:
-    build: ./service1
-    ports: 
-      - "5002:8000"
-    networks:
-      - network1
-  servicenata1-exposed-3:
-    build: ./service1
-    ports: 
-      - "5003:8000"
-    networks:
-      - network1
+  # servicenata1-exposed-2:
+  #   build: ./service1
+  #   ports: 
+  #     - "5002:8000"
+  #   networks:
+  #     - network1
+  # servicenata1-exposed-3:
+  #   build: ./service1
+  #   ports: 
+  #     - "5003:8000"
+  #   networks:
+  #     - network1
   servicenata2-internal:
     build: ./service2
     networks:
@@ -35,7 +35,7 @@ services:
       - network1
     depends_on:
       - servicenata1-exposed-1
-      - servicenata1-exposed-2
-      - servicenata1-exposed-3
+      #- servicenata1-exposed-2
+      #- servicenata1-exposed-3
 networks:
   network1: {}
