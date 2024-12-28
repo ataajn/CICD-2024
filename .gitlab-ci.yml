@@ -1,0 +1,24 @@
+image: docker:latest
+variables:
+  name: 'joonatan'
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "TODO build the application"
+
+build:
+  stage: test
+  script:
+    - echo "TODO run tests for the application"
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  script:
+    - echo "TODO deploy into production"
