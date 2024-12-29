@@ -12,10 +12,22 @@ build:
   script:
     - echo "TODO build the application"
 
-build:
+test:
   stage: test
+  image: docker:latest
+  before_script:
+    - echo "Launching the application for the tests"
+    - docker-compose up --build
+    - echo "Finished launching the application for the tests"
+    - sleep 50
   script:
-    - echo "TODO run tests for the application"
+    - echo "Running tests for the application"
+    - cd tests
+    - npm install
+    - npm test
+  after_script:
+    - echo "Finished test script"
+    - docker-compose down
 
 deploy:
   stage: deploy

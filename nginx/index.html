@@ -3,7 +3,7 @@
     <head>
         <script>
             async function getRequest() {
-                var data = await fetch('/fetchData/');
+                var data = await fetch('/request/');
                 var stringified = JSON.stringify(await data.json())
                 document.getElementById('TextAreaId').value = stringified;
             }
