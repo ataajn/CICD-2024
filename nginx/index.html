@@ -9,21 +9,40 @@
             }
 
             async function getState() {
+                console.log("testlog")
                 var data = await fetch('/state/');
                 var stringified = JSON.stringify(await data.json())
                 document.getElementById('TextAreaId').value = stringified;
             }
 
             async function getRunLog() {
+                console.log("testlog")
                 var data = await fetch('/run-log/');
                 var stringified = JSON.stringify(await data.json())
                 document.getElementById('TextAreaId').value = stringified;
             }
 
+            async function shutdown(){
+                changeState('SHUTDOWN')
+            }
+            async function pause(){
+                changeState('PAUSED')
+            }
+            async function init(){
+                changeState('INIT')
+            }
+            async function running(){
+                changeState('RUNNING')
+            }
+
             async function changeState(command){
-                // TODO: implement PUT request to change state
-                //var data = await fetch('/stop/');
-                //console.log("responded stop")
+                console.log(command)
+                var options = {
+                    method: 'PUT',
+                    body: command
+                }
+                var data = await fetch('/state/', options)
+                console.log(data);
             }
 
 
@@ -34,10 +53,10 @@
         <button onclick="getRequest()">Get Request</button>
         <button onclick="getRunLog()">Get Run-log</button>
         <button onclick="getState()">Get State</button>
-        <button onclick="changeState('SHUTDOWN')">Set state: Shutdown</button>
-        <button onclick="changeState('PAUSED')">Set state: Pause</button>
-        <button onclick="changeState('INIT')">Set state: Init</button>
-        <button onclick="changeState('RUNNING')">Set state: Running</button>
+        <button onclick="shutdown()">Set state: Shutdown</button>
+        <button onclick="pause()">Set state: Pause</button>
+        <button onclick="init()">Set state: Init</button>
+        <button onclick="running()">Set state: Running</button>
         <textarea rows="20" cols="100" id="TextAreaId"></textarea>
     </body>
 </html>
