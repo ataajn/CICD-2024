@@ -1,8 +1,9 @@
-version: "3.9"
+#version: "3.9"
 services:
   servicenata1-exposed-1:
     privileged: true
     build: ./service1
+    image: compse140.devops-gitlab.rd.tuni.fi:5050/jaakkolj/project/service1
     ports: 
       - "5001:8000"
     networks:
@@ -23,10 +24,12 @@ services:
   #     - network1
   servicenata2-internal:
     build: ./service2
+    image: compse140.devops-gitlab.rd.tuni.fi:5050/jaakkolj/project/service2
     networks:
       - network1
   nginx:
     build: ./nginx
+    image: compse140.devops-gitlab.rd.tuni.fi:5050/jaakkolj/project/nginx
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports: 

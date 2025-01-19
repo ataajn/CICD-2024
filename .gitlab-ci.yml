@@ -1,27 +1,32 @@
-image: docker:latest
+image: docker:27.4.1
+services:
+  - docker:27.4.1-dind
 variables:
-  name: 'joonatan'
+  DOCKER_TLS_CERTDIR: ""
+  apiurl: "http://docker:8198"
 
 stages:
   - build
   - test
-  - deploy
+  #- deploy
 
 build:
   stage: build
   script:
-    - echo "TODO build the application"
+    #- echo "Starting the build.."
+    #- docker-compose build
+    #- echo "Build finished"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - docker-compose build
+    - docker-compose push
 
 test:
   stage: test
-  image: docker:latest
-  services:
-    - docker:dind
   before_script:
-    - echo "Launching the application for the tests"
-    - docker-compose up --build
-    - echo "Finished launching the application for the tests"
-    - sleep 50
+    - apk add --no-cache nodejs npm #curl
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - docker-compose pull
+    - docker-compose up -d #--build
   script:
     - echo "Running tests for the application"
     - cd tests
@@ -31,8 +36,10 @@ test:
     - echo "Finished test script"
     - docker-compose down
 
-deploy:
-  stage: deploy
-  image: docker:latest
-  script:
-    - echo "TODO deploy into production"
+#deploy:
+#  stage: deploy
+#  #only:
+#  #  - 
+#  script:
+#    - echo "Starts the application on GitLab Runner, (or TODO deploys it to external server)"
+#    - docker-compose up --build -d

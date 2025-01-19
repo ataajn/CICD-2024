@@ -1,5 +1,5 @@
 const request = require('supertest');
-const baseAddress = "http://localhost:8198/"
+const baseAddress = process.env.apiurl || "http://localhost:8198/";
 
 // PUT requests
 describe('StateChangeTests',() => {
