@@ -8,9 +8,12 @@ import socket
 import sys
 from waitress import serve
 import subprocess
+import json
 
 IP_ADDRESS = "http://servicenata2-internal:8000/"
 server_sleeping = False
+application_state = "INIT"
+log_string = "Logs:"
 
 print("Python script execution started")
 
@@ -64,34 +67,76 @@ def waitAfterRequest():
 
 app = Flask(__name__)
 
+@app.route('/state', methods=['GET', 'PUT'])
+def handle_state():
+    global application_state
+    global log_string
 
+    # change state requests
+    if(request.method == 'PUT'):
+        data = request.data.decode('utf-8')
+        # debug logging
+        log_string =  log_string + '{ STATE, PUT, payload: ' + data + ' }'
+        # handle state changes
+        if(data == "RUNNING"):
+            application_state = "RUNNING"
+        elif(data == "INIT"):
+            # TODO: functionality to log out when INIT
+            application_state = "INIT"
+        elif(data == "PAUSED"):
+            application_state = "PAUSED"
+        elif(data == "SHUTDOWN"):
+            # TODO: change functionality SHUTDOWN
+            application_state = "SHUTDOWN"
+        # TODO: add functionality to keeping logs
+    else:
+        log_string =  log_string + '{ STATE, GET ' + application_state + ' }'
+
+    # TODO: return application state on GET
+    return "", 200, {'Content-Type': 'text/plain'}
+
+@app.route('/run-log')
+def get_logs():
+    # just for debugging at the moment
+    return log_string, 200
 
 @app.route('/')
+def handle_req():
+    return "Not found", 404
+
+
+@app.route('/request')
 def handle_request():
-    # TODO: add functionality to handle PAUSE, RUNNING, aka switch responding state
-    # TODO: functionality to log out when INIT
-    # TODO: change functionality SHUTDOWN
+    global application_state
+    if(application_state == "PAUSED"):
+        # TODO: do NOTHING
+        time.sleep(2)
+    
+    if(application_state != "RUNNING"):
+        return "", 404, {'Content-Type': 'text/plain'}
+
     # TODO: move the functionality of /request
-    # TODO: add functionality to run-log, add functionality to keeping logs.
+    # TODO: add functionality to run-log
 
     # Check for stop message
-    stopHeader = request.headers.get('StopMessage')
-    if(stopHeader == 'Yes'):
-        subprocess.run(
-            "docker stop $(docker ps -a -q)",
-            shell=True
-        )
-        time.sleep(10)
+    # stopHeader = request.headers.get('StopMessage')
+    # if(stopHeader == 'Yes'):
+    #     subprocess.run(
+    #         "docker stop $(docker ps -a -q)",
+    #         shell=True
+    #     )
+    #     time.sleep(10)
 
     # fulfills the description, and no new request is returned in the next two seconds. After that working normally.
-    global server_sleeping
-    if(server_sleeping == True):
-        time.sleep(2)
-        server_sleeping = False
-    else:
-        server_sleeping = True
-        threading.Thread(target=waitAfterRequest).start()
-    
+    #global server_sleeping
+    #if(server_sleeping == True):
+    #    time.sleep(2)
+    #    server_sleeping = False
+    #else:
+    #    server_sleeping = True
+    #    threading.Thread(target=waitAfterRequest).start()
+    #
+
     s1 = getLocalObject()
     s2 = getRequestObject()
     output = {
@@ -102,7 +147,7 @@ def handle_request():
     #@after_this_request
     #time.sleep(6)
     
-    return output
+    return json.dumps(output), 200, {'Content-Type': 'text/plain'}
 
 if __name__ == '__main__':
     print("External server started")

@@ -17,8 +17,9 @@ describe('PipelineTest',() => {
     it('Should put the application state to: RUNNING', async() => {
       // set it running
       const response = await request(baseAddress)
-        .put('/request/')
+        .put('/state/')
         .auth('ataajn','skumnisse')
+        .set('Content-Type', 'text/plain')
         .send("RUNNING");
       expect(response.statusCode).toBe(200);
     })

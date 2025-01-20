@@ -4,22 +4,22 @@
         <script>
             async function getRequest() {
                 var data = await fetch('/request/');
-                var stringified = JSON.stringify(await data.json())
-                document.getElementById('TextAreaId').value = stringified;
+                //var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = data;
             }
 
             async function getState() {
                 console.log("testlog")
                 var data = await fetch('/state/');
-                var stringified = JSON.stringify(await data.json())
-                document.getElementById('TextAreaId').value = stringified;
+                //var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = data;
             }
 
             async function getRunLog() {
                 console.log("testlog")
                 var data = await fetch('/run-log/');
-                var stringified = JSON.stringify(await data.json())
-                document.getElementById('TextAreaId').value = stringified;
+                //var stringified = JSON.stringify(await data.json())
+                document.getElementById('TextAreaId').value = data;
             }
 
             async function shutdown(){
