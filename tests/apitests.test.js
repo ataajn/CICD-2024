@@ -41,6 +41,21 @@ describe('PipelineTest',() => {
 
   // 4. Application should be able to init
   // TODO: add test for PUT /state INIT
+  describe('PUT /state INIT', ()=>{
+    it('Should put the application state to: INIT', async() => {
+      // set it running
+      const response = await request(baseAddress)
+        .put('/state/')
+        .auth('ataajn','skumnisse')
+        .set('Content-Type', 'text/plain')
+        .send("INIT");
+      // to force relog
+      expect(response.statusCode).toBe(401);
+      // try that it is successful
+      const response2 = await request(baseAddress).get('/request/')//.auth('ataajn','skumnisse');
+      expect(response2.statusCode).toBe(404);
+    })
+  })
 
   // 5. Application should continue when put to running again
   // TODO: second test for running
