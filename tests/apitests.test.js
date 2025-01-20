@@ -1,24 +1,34 @@
 const request = require('supertest');
 const baseAddress = process.env.apiurl || "http://localhost:8198/";
 
-// PUT requests
-describe('StateChangeTests',() => {
-  // TODO: add test for PUT /state INIT
+// API PIPELINE TEST tests all of the functions
+describe('PipelineTest',() => {
+  // 1. Application should NOT return anything when at the INIT state
+  describe('GET /request (Without init)', ()=>{
+    it('Should return 404', async() => {
+      // get data
+      const response = await request(baseAddress).get('/request/')
+      expect(response.statusCode).toBe(404);
+    })
+  })
 
-  // TODO: add test for PUT /state PAUSED
+  // 2. Application should be correctly put to init state
+  describe('PUT /state RUNNING', ()=>{
+    it('Should put the application state to: RUNNING', async() => {
+      // set it running
+      const response = await request(baseAddress)
+        .put('/request/')
+        .auth('ataajn','skumnisse')
+        .send("RUNNING");
+      expect(response.statusCode).toBe(200);
+    })
+  })
 
-  // TODO: add test for PUT /state RUNNING
-
-  // TODO: add test for PUT /state SHUTDOWN
-})
-
-// GET requests
-describe('GetRequestTests',() => {
-  // 1 // test for /request
-  describe('GET /request', ()=>{
+  // 3. Application should be running so it should return service information without login
+  describe('GET /request (200)', ()=>{
     it('Should return service1 and service2 information', async() => {
       // get data
-      const response = await request(baseAddress).get('/request/').auth('ataajn','skumnisse');
+      const response = await request(baseAddress).get('/request/')//.auth('ataajn','skumnisse');
       expect(response.statusCode).toBe(200);
 
       // minor test for data configuration
@@ -28,7 +38,25 @@ describe('GetRequestTests',() => {
     })
   })
 
+  // 4. Application should be able to init
+  // TODO: add test for PUT /state INIT
+
+  // 5. Application should continue when put to running again
+  // TODO: second test for running
+
+  // 6. Should get the application state as plaintext
+  // TODO: add test for /state (GET)
+
+  // 7. Application should be able to be put on pause, then it should not return any requests.
+  // TODO: add test for PUT /state PAUSED
+  // TODO: test that it actually is paused
+
+  // 8. Application should be able to be put back to RUNNING
+  // TODO: second running test
+
+  // 9. Application should return logs for all actions before
   // TODO: add test for /run-log
 
-  // TODO: add test for /state (GET)
+  // 10. Application should shut down all containers.
+  // TODO: add test for PUT /state SHUTDOWN
 })
