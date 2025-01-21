@@ -59,11 +59,16 @@ def getLocalObject():
         "last_boot_since" : getLastBootTimeSince()
     }
 
-
 def waitAfterRequest():
     time.sleep(2)
     global server_sleeping
     server_sleeping = False
+
+def waitOnStagePaused():
+    global application_state
+    while(application_state == 'PAUSED'):
+        time.sleep(1)
+
 
 app = Flask(__name__)
 
@@ -86,13 +91,18 @@ def handle_state():
             return "", 401, {'Content-Type': 'text/plain'}
         elif(data == "PAUSED"):
             application_state = "PAUSED"
+            return application_state, 200, {'Content-Type': 'text/plain'}
         elif(data == "SHUTDOWN"):
             # TODO: change functionality SHUTDOWN
             application_state = "SHUTDOWN"
         # TODO: add functionality to keeping logs
     else:
         log_string =  log_string + '{ STATE, GET ' + application_state + ' }'
-        
+
+    if(application_state == "PAUSED"):
+        waitOnStagePaused()
+        return "", 500, {'Content-Type': 'text/plain'}
+
     # return state, always.
     return application_state, 200, {'Content-Type': 'text/plain'}
 
@@ -100,8 +110,8 @@ def handle_state():
 def get_logs():
     # just for debugging at the moment
     if(application_state == "PAUSED"):
-        # TODO: do NOTHING
-        time.sleep(2)
+        waitOnStagePaused()
+        return "", 500, {'Content-Type': 'text/plain'}
     if(application_state != "RUNNING"):
         return "", 404
     return log_string, 200
@@ -109,8 +119,8 @@ def get_logs():
 @app.route('/')
 def handle_req():
     if(application_state == "PAUSED"):
-        # TODO: do NOTHING
-        time.sleep(2)
+        waitOnStagePaused()
+        return "", 500, {'Content-Type': 'text/plain'}
     return "Not found", 404
 
 
@@ -118,9 +128,9 @@ def handle_req():
 def handle_request():
     global application_state
     if(application_state == "PAUSED"):
-        # TODO: do NOTHING
-        time.sleep(2)
-    
+        waitOnStagePaused()
+        return "", 500, {'Content-Type': 'text/plain'}
+
     if(application_state != "RUNNING"):
         return "", 404, {'Content-Type': 'text/plain'}
 

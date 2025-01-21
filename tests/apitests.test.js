@@ -83,6 +83,7 @@ describe('PipelineTest',() => {
       try{
         const response2 = await request(baseAddress)
           .get('/request/')
+          .timeout({ response: 4000 })
       } catch(ex){
         // timeout
         error = ex;
