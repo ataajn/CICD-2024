@@ -2,7 +2,7 @@ import requests
 import time
 import threading
 from flask import Flask
-from flask import request
+from flask import request, session
 import psutil
 import socket
 import sys
@@ -81,8 +81,9 @@ def handle_state():
         if(data == "RUNNING"):
             application_state = "RUNNING"
         elif(data == "INIT"):
-            # TODO: functionality to log out when INIT
             application_state = "INIT"
+            # force logout
+            return "", 401, {'Content-Type': 'text/plain'}
         elif(data == "PAUSED"):
             application_state = "PAUSED"
         elif(data == "SHUTDOWN"):
@@ -98,10 +99,18 @@ def handle_state():
 @app.route('/run-log')
 def get_logs():
     # just for debugging at the moment
+    if(application_state == "PAUSED"):
+        # TODO: do NOTHING
+        time.sleep(2)
+    if(application_state != "RUNNING"):
+        return "", 404
     return log_string, 200
 
 @app.route('/')
 def handle_req():
+    if(application_state == "PAUSED"):
+        # TODO: do NOTHING
+        time.sleep(2)
     return "Not found", 404
 
 
