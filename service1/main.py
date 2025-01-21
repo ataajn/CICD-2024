@@ -92,9 +92,9 @@ def handle_state():
         # TODO: add functionality to keeping logs
     else:
         log_string =  log_string + '{ STATE, GET ' + application_state + ' }'
-
-    # TODO: return application state on GET
-    return "", 200, {'Content-Type': 'text/plain'}
+        
+    # return state, always.
+    return application_state, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/run-log')
 def get_logs():
