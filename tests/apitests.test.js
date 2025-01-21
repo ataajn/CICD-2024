@@ -58,10 +58,27 @@ describe('PipelineTest',() => {
   })
 
   // 5. Application should continue when put to running again
-  // TODO: second test for running
+  describe('PUT /state RUNNING', ()=>{
+    it('Should put the application state to: RUNNING', async() => {
+      // set it running
+      const response = await request(baseAddress)
+        .put('/state/')
+        .auth('ataajn','skumnisse')
+        .set('Content-Type', 'text/plain')
+        .send("RUNNING");
+      expect(response.statusCode).toBe(200);
+    })
+  })
 
   // 6. Should get the application state as plaintext
-  // TODO: add test for /state (GET)
+  describe('GET /state', ()=>{
+    it('Should be at the RUNNING state', async() => {
+      // get data
+      const response = await request(baseAddress).get('/state/')
+      expect(response.statusCode).toBe(200);
+      expect(response.text).toBe('RUNNING');
+    })
+  })
 
   // 7. Application should be able to be put on pause, then it should not return any requests.
   // TODO: add test for PUT /state PAUSED
