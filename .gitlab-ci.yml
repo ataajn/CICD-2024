@@ -44,4 +44,4 @@ deploy:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - docker-compose pull
     - docker-compose up -d #--build
-    - docker-compose down # remove this when actually put into production
+    #- docker-compose down # remove this when actually put into production
