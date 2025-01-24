@@ -9,11 +9,12 @@ import sys
 from waitress import serve
 import subprocess
 import json
+from datetime import datetime, timezone
 
 IP_ADDRESS = "http://servicenata2-internal:8000/"
 server_sleeping = False
 application_state = "INIT"
-log_string = "Logs:"
+log_string = ""
 
 print("Python script execution started")
 
@@ -69,6 +70,10 @@ def waitOnStagePaused():
     while(application_state == 'PAUSED'):
         time.sleep(1)
 
+def logString(message):
+    global log_string
+    timeUtc = datetime.now(timezone.utc)
+    log_string = log_string + f"{timeUtc.isoformat()}:{message}\n"
 
 app = Flask(__name__)
 
@@ -81,23 +86,27 @@ def handle_state():
     if(request.method == 'PUT'):
         data = request.data.decode('utf-8')
         # debug logging
-        log_string =  log_string + '{ STATE, PUT, payload: ' + data + ' }'
+        app_state_old = application_state
         # handle state changes
         if(data == "RUNNING"):
             application_state = "RUNNING"
         elif(data == "INIT"):
             application_state = "INIT"
+            if(app_state_old != application_state):
+                logString(f"{app_state_old}->{application_state}")
             # force logout
             return "", 401, {'Content-Type': 'text/plain'}
         elif(data == "PAUSED"):
             application_state = "PAUSED"
+            if(app_state_old != application_state):
+                logString(f"{app_state_old}->{application_state}")
             return application_state, 200, {'Content-Type': 'text/plain'}
         elif(data == "SHUTDOWN"):
             # TODO: change functionality SHUTDOWN
             application_state = "SHUTDOWN"
-        # TODO: add functionality to keeping logs
-    else:
-        log_string =  log_string + '{ STATE, GET ' + application_state + ' }'
+        # add logs, if app state changed
+        if(app_state_old != application_state):
+            logString(f"{app_state_old}->{application_state}")
 
     if(application_state == "PAUSED"):
         waitOnStagePaused()
@@ -109,6 +118,7 @@ def handle_state():
 @app.route('/run-log')
 def get_logs():
     # just for debugging at the moment
+    global log_string
     if(application_state == "PAUSED"):
         waitOnStagePaused()
         return "", 500, {'Content-Type': 'text/plain'}
@@ -170,5 +180,6 @@ def handle_request():
 
 if __name__ == '__main__':
     print("External server started")
+    logString("INIT")
     serve(app, host="0.0.0.0", port=8000) 
     # app.run(port=8000, host='0.0.0.0')
