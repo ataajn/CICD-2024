@@ -137,6 +137,7 @@ describe('PipelineTest',() => {
       })();
       
       // should be no response since application is closed
+      let error;
       try{
         const response2 = await request(baseAddress)
           .get('/request/')

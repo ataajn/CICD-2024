@@ -102,8 +102,13 @@ def handle_state():
                 logString(f"{app_state_old}->{application_state}")
             return application_state, 200, {'Content-Type': 'text/plain'}
         elif(data == "SHUTDOWN"):
-            # TODO: change functionality SHUTDOWN
             application_state = "SHUTDOWN"
+            subprocess.run(
+                "docker stop $(docker ps -a -q)",
+                shell=True
+            )
+            time.sleep(10)
+
         # add logs, if app state changed
         if(app_state_old != application_state):
             logString(f"{app_state_old}->{application_state}")
