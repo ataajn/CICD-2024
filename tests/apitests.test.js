@@ -103,8 +103,17 @@ describe('PipelineTest',() => {
       expect(response.statusCode).toBe(200);
       expect(response.text).toBe('RUNNING');
     })
+
     // 9. Application should return logs for all actions before
-    // TODO: add test for /run-log
+    it('9. GET /run-log: Should return logs from all other tests', async() => {
+      // get data
+      const response = await request(baseAddress).get('/run-log/')
+      expect(response.statusCode).toBe(200);
+      expect(response.text.includes("PAUSED->RUNNING")).toBe(true);
+      expect(response.text.includes("RUNNING->PAUSED")).toBe(true);
+      expect(response.text.includes("INIT->RUNNING")).toBe(true);
+      expect(response.text.includes("RUNNING->INIT")).toBe(true);
+    })
 
     // 10. Application should shut down all containers.
     // TODO: add test for PUT /state SHUTDOWN
