@@ -2,6 +2,7 @@ const request = require('supertest');
 const Test = require('supertest/lib/test');
 const baseAddress = process.env.apiurl || "http://localhost:8198/";
 
+jest.setTimeout(20000);
 // API PIPELINE TEST tests all of the functions
 describe('PipelineTest',() => {
 
@@ -116,6 +117,36 @@ describe('PipelineTest',() => {
     })
 
     // 10. Application should shut down all containers.
-    // TODO: add test for PUT /state SHUTDOWN
+    it('10. PUT /state SHUTDOWN: Should close the application', async() => {
+      //jest.setTimeout(20000)
+      // shutdown all the containers
+      try{
+        const response = await request(baseAddress)
+          .put('/state/')
+          .auth('ataajn','skumnisse')
+          .set('Content-Type', 'text/plain')
+          .send("SHUTDOWN")
+          .timeout({ response: 4000 });
+      } catch(ex){
+        // timeout
+      }
+
+      // give it time to close everything
+      await (async () => {
+        return new Promise(resolve => setTimeout(resolve,10000))
+      })();
+      
+      // should be no response since application is closed
+      try{
+        const response2 = await request(baseAddress)
+          .get('/request/')
+          .timeout({ response: 4000 })
+      } catch(ex){
+        // timeout
+        error = ex;
+      }
+      // check that error is not null
+      expect(error !== null && error !== undefined).toBe(true);
+    })
   })
 })
